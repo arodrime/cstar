@@ -108,7 +108,7 @@ class RemoteParamiko(object):
                 nohup ./wrapper
                 """ % (self.escape(dir),)
 
-            stdin, stdout, stderr = self.client.exec_command(cmd, timeout=timeout)
+            stdin, stdout, stderr = self.client.exec_command(cmd, timeout=timeout, get_pty = True)
             _, _, _ = self._read_results(stdin, stdout, stderr, timeout)
 
             real_output = self.read_file(dir + "/stdout")
@@ -132,7 +132,7 @@ class RemoteParamiko(object):
         try:
             self._connect()
             cmd = " ".join(self.escape(s) for s in argv)
-            stdin, stdout, stderr = self.client.exec_command(cmd)
+            stdin, stdout, stderr = self.client.exec_command(cmd, get_pty = True)
             status, stdout_chunks, stderr_chunks = self._read_results(stdin, stdout, stderr)
             out = b''.join(stdout_chunks)
             error = b''.join(stderr_chunks)
